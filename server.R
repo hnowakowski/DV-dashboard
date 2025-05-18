@@ -1,7 +1,6 @@
 library(shiny)
+library(shinydashboard)
 
-shinyServer(
-  function(input, output){
-    
-  }
-)
+function(input, output){
+  
+}
