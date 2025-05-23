@@ -74,9 +74,8 @@ dashboardPage(
                        )
                 ),
                 column(width=4,
-                       box(width=12, style="height: 28.5vh;", 
-                           h4("HDI"),
-                           textOutput("hdi_value")
+                       box(width=12, style="height: 17vh;", 
+                           valueBoxOutput("hdi_value")
                        ),
                        box(width=12, style="height: 28.5vh;",
                            h4("Happiness Score"),
