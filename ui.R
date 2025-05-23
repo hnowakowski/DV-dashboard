@@ -1,9 +1,14 @@
 library(shiny)
 library(shinydashboard)
+library(flexdashboard)
 library(leaflet)
-library(spData)
+library(spData)      
+library(tidyr)
+library(ggsci)
+library(ggplot2)
 library(dplyr)
-
+library(countrycode)
+library(sf)
 
 
 dashboardPage(
@@ -27,7 +32,7 @@ dashboardPage(
                 column(width=4,
                        
                        box(
-                         width = 14, style="height: 17vh;", 
+                         width = 12, style="height: 17vh;", 
                           valueBoxOutput("pop_count", width = 16)
                        )
                        ,
@@ -36,8 +41,8 @@ dashboardPage(
                            gaugeOutput("fertility_gauge")
                        ),
                        box(width=12, style="height: 40vh;",
-                           title = 'boopers',
-                           plotOutput("pop_growth", height = "290px")
+                           h4("booper"),
+                           plotOutput("pop_growth")
                        )
                 )
                 
@@ -60,7 +65,7 @@ dashboardPage(
                            textOutput("gdp_per_capita")
                        ),
                        box(width=12, style="height: 40vh;",
-                           plotOutput("pop_growth", height = "290px")
+                           plotOutput("gdp_growth", height = "290px")
                        )
                 )
               )

@@ -97,6 +97,7 @@ shinyServer(function(input, output, session) {
   
   output$pop_growth <- renderPlot({
     req(selected_country())
+    print("booper")
 
     pop_hist <- pop_data %>%
       filter(Country.Code == selected_country()) %>%
