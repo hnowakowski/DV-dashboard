@@ -14,8 +14,8 @@ gdp_data <- read.csv("datasets/gdp.csv", sep = ",")
 hap_data <- read.csv("datasets/happiness.csv", sep = ",")
 hdi_data <- read.csv("datasets/hdi.csv", sep = ",")
 
-pop_data$flagCode <- countrycode(pop_data$Country.Code, origin = "iso3c", destination = "iso2c") 
-fer_data$flagCode <- countrycode(fer_data$Country.Code, origin = "iso3c", destination = "iso2c") 
+pop_data$Country.Code <- countrycode(pop_data$Country.Code, origin = "iso3c", destination = "iso2c") 
+fer_data$Country.Code <- countrycode(fer_data$Country.Code, origin = "iso3c", destination = "iso2c") 
 
 shinyServer(function(input, output, session) {
   print("running")
@@ -44,8 +44,8 @@ shinyServer(function(input, output, session) {
     
     p <- pop_data %>%
       filter(Country.Code == selected_country()) %>%
-      slice(1) %>%
       pull(X2023)
+    
     
     if (!(length(p) == 0)) {
       if (!(is.na(p))){
@@ -57,10 +57,15 @@ shinyServer(function(input, output, session) {
       balue = "undefined"
     }
     
+    country_name <- pop_data %>%
+      filter(Country.Code == selected_country()) %>%
+      pull(Country.Name)
+    
     shinydashboard::valueBox(
       value = balue,
-      subtitle = paste("Population of", selected_country()),
+      subtitle = paste("Population of", country_name),
       icon = icon("user"),
+      color = "orange",
       width = 14
     )
     
