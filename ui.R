@@ -28,12 +28,12 @@ dashboardPage(
                        
                        box(
                          width = 14, style="height: 17vh;", 
-                        valueBoxOutput("pop_count", width = 16)
+                          valueBoxOutput("pop_count", width = 16)
                        )
                        ,
                        box(width=12, style="height: 28.5vh;",
                            h4("Fertility Rate"),
-                           uiOutput("fertility_gauge")
+                           gaugeOutput("fertility_gauge")
                        ),
                        box(width=12, style="height: 40vh;",
                            title = 'boopers',

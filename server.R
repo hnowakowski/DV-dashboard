@@ -1,8 +1,10 @@
 library(shiny)
 library(shinydashboard)
+library(flexdashboard)
 library(leaflet)
 library(spData)      
 library(tidyr)
+library(ggsci)
 library(ggplot2)
 library(dplyr)
 library(countrycode)
@@ -72,8 +74,24 @@ shinyServer(function(input, output, session) {
   })
   
   
-  output$fertility_rate <- renderUI({
+  output$fertility_gauge <- renderGauge({
     req(selected_country())
+    
+    all_fertility <- fer_data %>%
+      pull(X2023)
+    
+    max_fertility <- max(all_fertility, na.rm = TRUE)
+    
+    f <- fer_data %>%
+      filter(Country.Code == selected_country()) %>%
+      pull(X2023)
+  
+    
+    gauge(f, min=0, max = max_fertility, symbol = '', gaugeSectors(
+      success = c(2.1, max_fertility),
+      warning = c(1.5, 2.1),
+      danger = c(0, 1.5)
+    ))
 
   })
   
@@ -99,7 +117,6 @@ shinyServer(function(input, output, session) {
 })
 
 thing <- function(){
-  print("this is ran")
   # --- GDP MAP ---
   output$gdp_map <- renderLeaflet({
     leaflet(world) %>%
