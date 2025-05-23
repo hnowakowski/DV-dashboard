@@ -5,6 +5,8 @@ library(spData)
 library(tidyr)
 library(ggplot2)
 library(dplyr)
+library(countrycode)
+library(sf)
 
 pop_data <- read.csv("datasets/population.csv", sep = ",")
 fer_data <- read.csv("datasets/fertility.csv", sep = ",")
@@ -12,20 +14,20 @@ gdp_data <- read.csv("datasets/gdp.csv", sep = ",")
 hap_data <- read.csv("datasets/happiness.csv", sep = ",")
 hdi_data <- read.csv("datasets/hdi.csv", sep = ",")
 
-world <- spData::world %>%
-  filter(name_long != "Antarctica")
+pop_data$flagCode <- countrycode(pop_data$Country.Code, origin = "iso3c", destination = "iso2c") 
+fer_data$flagCode <- countrycode(fer_data$Country.Code, origin = "iso3c", destination = "iso2c") 
 
-
-function(input, output, session) {
+shinyServer(function(input, output, session) {
+  print("running")
 
 
   selected_country <- reactiveVal(NULL)
   
   # --- POPULATION MAP ---
   output$pop_map <- renderLeaflet({
-    leaflet(world) %>%
+    leaflet(spData::world) %>%
       addProviderTiles("Esri.WorldTopoMap") %>%
-      addPolygons(layerId = ~name_long,
+      addPolygons(layerId = ~iso_a2,
                   fillColor = "lightblue", fillOpacity = 0.2,
                   color = "black", weight = 1,
                   label = ~name_long) %>%
@@ -34,13 +36,14 @@ function(input, output, session) {
   
   observeEvent(input$pop_map_shape_click, {
     selected_country(input$pop_map_shape_click$id)
-  })
+})
+
   
   output$pop_count <- renderValueBox({
     req(selected_country())
     
     p <- pop_data %>%
-      filter(Country.Name == selected_country()) %>%
+      filter(Country.Code == selected_country()) %>%
       slice(1) %>%
       pull(X2023)
     
@@ -73,7 +76,7 @@ function(input, output, session) {
     req(selected_country())
 
     pop_hist <- pop_data %>%
-      filter(Country.Name == selected_country()) %>%
+      filter(Country.Code == selected_country()) %>%
       pivot_longer(
         cols = starts_with("X"),
         names_to = "Year",
@@ -88,7 +91,10 @@ function(input, output, session) {
            x = "Year", y = "Population") +
       theme_minimal()
   })
-  
+})
+
+thing <- function(){
+  print("this is ran")
   # --- GDP MAP ---
   output$gdp_map <- renderLeaflet({
     leaflet(world) %>%
