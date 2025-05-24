@@ -84,7 +84,7 @@ dashboardPage(
                        ),
                        box(width=12, style="height: 28.5vh;",
                            h4("Happiness Score"),
-                           textOutput("happy_score")
+                           gaugeOutput("happy_score")
                        ),
                        box(width=12, style="height: 28.5vh;",
                            h4("HDI Over Time"),

@@ -89,7 +89,9 @@ shinyServer(function(input, output, session) {
       filter(Country.Code == selected_country()) %>%
       pull(X2023)
   
-    
+    # 2.1 is the replacement rate hence it's marked in green
+    # basically the entire developed world is below that so the red threshold is 1.5 tho
+    # so that not all western countries are marked in the red and there's moreso a distinction between whose situation is bad and whose is terrible
     gauge(f, min=0, max = max_fertility, symbol = '', gaugeSectors(
       success = c(2.1, max_fertility),
       warning = c(1.5, 2.1),
@@ -250,8 +252,12 @@ shinyServer(function(input, output, session) {
       pull(HumanDevelopmentIndex_HDI_score_2023)
     
     hdi_c <- hdi_data %>%
-      filter(country == selected_country()) %>%
+      filter(flagCode == selected_country()) %>%
       pull(HumanDevelopmentIndex_HDITierCurrent_txt_YearFree)
+    
+    country_name <- hdi_data %>%
+      filter(flagCode == selected_country()) %>%
+      pull(country)
     
     if (!(length(hdi) == 0)) {
       if (hdi_c == "Very High") {
@@ -288,13 +294,40 @@ shinyServer(function(input, output, session) {
 
   })
   
-  output$happy_score <- renderText({
+  output$happy_score <- renderGauge({
     req(selected_country())
+    
+    country_name <- hdi_data %>%
+      filter(flagCode == selected_country()) %>%
+      pull(country)
+    
+    all_hap <- hap_data %>%
+      pull(HappiestCountriesWorldHappinessReportScore2024)
+    
+    max_hap <- max(all_hap, na.rm = TRUE)
+    
+    h <- hap_data %>%
+      filter(flagCode == selected_country()) %>%
+      pull(HappiestCountriesWorldHappinessReportScore2024)
+    
+    
+    gauge(h, min=0, max = max_hap, symbol = '', gaugeSectors(
+      success = c(max_hap*0.7, max_hap),
+      warning = c(max_hap*0.5, max_hap*0.7),
+      danger = c(0, max_hap*0.5)
+    ))
 
   })
   
   output$hdi_growth <- renderPlot({
     req(selected_country())
+    
+    country_name <- hdi_data %>%
+      filter(flagCode == selected_country()) %>%
+      pull(country)
+    
+    # idk what here
+    
     
   })
 })
