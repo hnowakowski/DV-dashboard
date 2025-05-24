@@ -9,6 +9,7 @@ library(ggplot2)
 library(dplyr)
 library(countrycode)
 library(sf)
+#library(rsconnect)
 
 pop_data <- read.csv("datasets/population.csv", sep = ",")
 fer_data <- read.csv("datasets/fertility.csv", sep = ",")
@@ -24,7 +25,8 @@ gdp_capita_data$Country.Code <- countrycode(gdp_capita_data$Country.Code, origin
 
 shinyServer(function(input, output, session) {
   print("running")
-
+  #rsconnect::writeManifest()
+  
 
   selected_country <- reactiveVal(NULL)
   
