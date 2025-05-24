@@ -1,31 +1,99 @@
 library(shiny)
 library(shinydashboard)
+library(flexdashboard)
+library(leaflet)
+library(spData)      
+library(tidyr)
+library(ggsci)
+library(ggplot2)
+library(dplyr)
+library(countrycode)
+library(sf)
 
-shinyUI(
-  dashboardPage(
-    dashboardHeader(title="people inspector idk"),
-    dashboardSidebar(
-      sidebarMenu(
-        menuItem("Population", tabName = "population"),
-        menuItem("GDP", tabName = "gdp"),
-        menuItem("Quality of Life", tabName = "qol")
+
+dashboardPage(
+  dashboardHeader(title="People Inspector"),
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Population", tabName = "population"),
+      menuItem("GDP", tabName = "gdp"),
+      menuItem("Quality of Life", tabName = "qol")
+    )
+  ),
+  dashboardBody(
+    tabItems(
+      tabItem(tabName = "population",
+              fluidRow(
+                column(width=8,
+                       box(width=12, style="height: 90vh;",
+                           leafletOutput("pop_map", height = "90vh")
+                       )
+                ),
+                column(width=4,
+                       
+                       box(
+                         width = 12, style="height: 17vh;", 
+                          valueBoxOutput("pop_count", width = 16)
+                       )
+                       ,
+                       box(width=12, style="height: 28.5vh;",
+                           h4("Fertility Rate"),
+                           gaugeOutput("fertility_gauge")
+                       ),
+                       box(width=12, style="height: 40vh;",
+                           h4("booper"),
+                           plotOutput("pop_growth")
+                       )
+                )
+                
+              )
+      ),
+      
+      tabItem(tabName = "gdp",
+              fluidRow(
+                column(width=8,
+                       box(width=12, style="height: 90vh;",
+                           leafletOutput("gdp_map", height = "90vh")
+                       )
+                ),
+                column(width=4,
+                       box(width=12, style="height: 17vh;", 
+                           valueBoxOutput("gdp_value")
+                       ),
+                       box(width=12, style="height: 28.5vh;",
+                           h4("GDP per Capita"),
+                           gaugeOutput("gdp_capita_gauge")
+                       ),
+                       box(width=12, style="height: 40vh;",
+                           plotOutput("gdp_growth")
+                       )
+                )
+              )
+      ),
+      
+      tabItem(tabName = "qol",
+              fluidRow(
+                column(width=8,
+                       box(width=12, style="height: 90vh;",
+                           leafletOutput("qol_map", height = "90vh")
+                       )
+                ),
+                column(width=4,
+                       box(width=12, style="height: 17vh;", 
+                           valueBoxOutput("hdi_value")
+                       ),
+                       box(width=12, style="height: 28.5vh;",
+                           h4("Happiness Score"),
+                           gaugeOutput("happy_score")
+                       ),
+                       box(width=12, style="height: 28.5vh;",
+                           h4("HDI Over Time"),
+                           plotOutput("hdi_growth")
+                       )
+                )
+              )
       )
-    ),
-    dashboardBody(
-      fluidRow( # display flex does not work :(((((
-        column(width=8,
-               div(id="map_select_pop",
-                   box(width=12, style="height: 90vh;", "map here")
-                   )),
-        column(width=4,
-               div(id="value_box_pop", 
-                   box(width=12, style="height: 28.5vh;", "pop count here")),
-               div(id="gauge_pop",
-                   box(width=12, style="height: 28.5vh;", "fertility rate here")),
-               div(id="graph_pop",
-                   box(width=12, style="height: 28.5vh;", "pop graph here"))
-               )
-        )
-      )
+    )
   )
+
 )
