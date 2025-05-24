@@ -62,10 +62,10 @@ dashboardPage(
                        ),
                        box(width=12, style="height: 28.5vh;",
                            h4("GDP per Capita"),
-                           textOutput("gdp_per_capita")
+                           gaugeOutput("gdp_capita_gauge")
                        ),
                        box(width=12, style="height: 40vh;",
-                           plotOutput("gdp_growth", height = "290px")
+                           plotOutput("gdp_growth")
                        )
                 )
               )

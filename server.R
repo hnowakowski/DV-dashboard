@@ -13,11 +13,14 @@ library(sf)
 pop_data <- read.csv("datasets/population.csv", sep = ",")
 fer_data <- read.csv("datasets/fertility.csv", sep = ",")
 gdp_data <- read.csv("datasets/gdp.csv", sep = ",")
+gdp_capita_data <- read.csv("datasets/gdp_per_capita.csv", sep=",")
 hap_data <- read.csv("datasets/happiness.csv", sep = ",")
 hdi_data <- read.csv("datasets/hdi.csv", sep = ",")
 
 pop_data$Country.Code <- countrycode(pop_data$Country.Code, origin = "iso3c", destination = "iso2c") 
 fer_data$Country.Code <- countrycode(fer_data$Country.Code, origin = "iso3c", destination = "iso2c") 
+gdp_data$Country.Code <- countrycode(gdp_data$Country.Code, origin = "iso3c", destination = "iso2c") 
+gdp_capita_data$Country.Code <- countrycode(gdp_capita_data$Country.Code, origin = "iso3c", destination = "iso2c") 
 
 shinyServer(function(input, output, session) {
   print("running")
@@ -97,7 +100,10 @@ shinyServer(function(input, output, session) {
   
   output$pop_growth <- renderPlot({
     req(selected_country())
-    print("booper")
+    
+    country_name <- pop_data %>%
+      filter(Country.Code == selected_country()) %>%
+      pull(Country.Name)
 
     pop_hist <- pop_data %>%
       filter(Country.Code == selected_country()) %>%
@@ -115,14 +121,12 @@ shinyServer(function(input, output, session) {
            x = "Year", y = "Population") +
       theme_minimal()
   })
-})
-
-thing <- function(){
+  
   # --- GDP MAP ---
   output$gdp_map <- renderLeaflet({
-    leaflet(world) %>%
+    leaflet(spData::world) %>%
       addProviderTiles("Esri.WorldTopoMap") %>%
-      addPolygons(layerId = ~name_long,
+      addPolygons(layerId = ~iso_a2,
                   fillColor = "green", fillOpacity = 0.2,
                   color = "black", weight = 1,
                   label = ~name_long) %>%
@@ -137,8 +141,7 @@ thing <- function(){
     req(selected_country())
     
     gdp <- gdp_data %>%
-      filter(Country.Name == selected_country()) %>%
-      slice(1) %>%
+      filter(Country.Code == selected_country()) %>%
       pull(X2023)
     
     gdp <- round(gdp/1000000000,1)
@@ -156,26 +159,55 @@ thing <- function(){
       bolor = "black"
     }
     
+    country_name <- gdp_data %>%
+      filter(Country.Code == selected_country()) %>%
+      pull(Country.Name)
     
     shinydashboard::valueBox(
       value = balue,
-      subtitle = paste("GDP of", selected_country()),
+      subtitle = paste("GDP of", country_name),
       icon = icon("dollar-sign"),
       width = 14,
       color = bolor
     )
   })
   
-  output$gdp_per_capita <- renderText({
+  output$gdp_capita_gauge <- renderGauge({
     req(selected_country())
-
+    
+    #all_gdp_capita <- gdp_capita_data %>%
+    #  pull(X2023)
+    
+    #max_gdp_capita <- max(all_gdp_capita, na.rm = TRUE)
+    
+    g <- gdp_capita_data %>%
+      filter(Country.Code == selected_country()) %>%
+      pull(X2023)
+    
+    # fictional tax haven countries make the gauge based on max gdp per capita useless (Japan is in the red)
+    # so the thresholds are more or less an educated assumption:
+    # Green: 30k and up -> most western countries like Japan 33k, Germany 54k, France 44k, usa 82k
+    # Yellow: 10k - 30k -> most *somewhat* developed countries like Poland 22k, r*ssia 13k (emphasis on somewhat developed), China 12k, Mexico 13k
+    # Red: below 10k -> most developing countries like basically most of sub-saharan Africa
+    # print(max_gdp_capita)
+    
+    # max gauge value set a lil above usa's gdp per capita so that the bar does not look comically small for most countries
+    gauge(g, min=0, max = 90000, symbol = '', gaugeSectors(
+      success = c(30000, 90000),
+      warning = c(10000, 30000),
+      danger = c(0, 10000)
+    ))
   })
   
   output$gdp_growth <- renderPlot({
     req(selected_country())
     
+    country_name <- gdp_data %>%
+      filter(Country.Code == selected_country()) %>%
+      pull(Country.Name)
+    
     gdp_hist <- gdp_data %>%
-      filter(Country.Name == selected_country()) %>%
+      filter(Country.Code == selected_country()) %>%
       pivot_longer(
         cols = starts_with("X"),
         names_to = "Year",
@@ -190,16 +222,16 @@ thing <- function(){
     ggplot(gdp_hist, aes(x = Year, y = GDP)) +
       geom_line(color = "green") +
       geom_point() +
-      labs(title = paste("GDP Growth for", selected_country()),
+      labs(title = paste("GDP Growth for", country_name),
            x = "Year", y = "GDP") +
       theme_minimal()
   })
   
   # --- QOL MAP ---
   output$qol_map <- renderLeaflet({
-    leaflet(world) %>%
+    leaflet(spData::world) %>%
       addProviderTiles("Esri.WorldTopoMap") %>%
-      addPolygons(layerId = ~name_long,
+      addPolygons(layerId = ~iso_a2,
                   fillColor = "orange", fillOpacity = 0.2,
                   color = "black", weight = 1,
                   label = ~name_long) %>%
@@ -214,13 +246,11 @@ thing <- function(){
     req(selected_country())
     
     hdi <- hdi_data %>%
-      filter(country == selected_country()) %>%
-      slice(1) %>%
+      filter(flagCode == selected_country()) %>%
       pull(HumanDevelopmentIndex_HDI_score_2023)
     
     hdi_c <- hdi_data %>%
       filter(country == selected_country()) %>%
-      slice(1) %>%
       pull(HumanDevelopmentIndex_HDITierCurrent_txt_YearFree)
     
     if (!(length(hdi) == 0)) {
@@ -249,7 +279,7 @@ thing <- function(){
     
     shinydashboard::valueBox(
       value = balue,
-      subtitle = paste("HDI of", selected_country()),
+      subtitle = paste("HDI of", country_name),
       icon = bicon,
       width = 14,
       color = bolor
@@ -267,4 +297,4 @@ thing <- function(){
     req(selected_country())
     
   })
-}
+})
