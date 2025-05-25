@@ -9,9 +9,10 @@ library(ggplot2)
 library(dplyr)
 library(countrycode)
 library(sf)
+library(shinythemes)
 
 
-dashboardPage(
+dashboardPage(skin = "black",
   dashboardHeader(title="People Inspector"),
   dashboardSidebar(
     sidebarMenu(
@@ -22,6 +23,9 @@ dashboardPage(
     )
   ),
   dashboardBody(
+    tags$head(
+      includeCSS("www/style.css")
+    ),
     tabItems(
       tabItem(tabName = "introduction",
               h2("Welcome to the People Inspector Dashboard"),
@@ -32,23 +36,24 @@ dashboardPage(
       tabItem(tabName = "population",
               fluidRow(
                 column(width=8,
-                       box(width=12, style="height: 90vh;",
-                           leafletOutput("pop_map", height = "100%", width = "100%")
+                       box(width=12, style="height: 92vh;",
+                           leafletOutput("pop_map", height = "90vh")
                        )
                 ),
                 column(width=4,
                        
                        box(
-                         width = 12, style="height: 17vh;", 
-                          valueBoxOutput("pop_count", height = "100%", width = "100%")
+                         width = 12, 
+                          valueBoxOutput("pop_count", width = 16)
                        )
                        ,
-                       box(width=12, style="height: 28.5vh;",
+                       box(width=12,
                            h4("Fertility Rate"),
                            gaugeOutput("fertility_gauge")
                        ),
-                       box(width=12, style="height: 40vh;",
-                           plotOutput("pop_growth", height = "100%", width = "100%")
+                       box(width=12,
+                           h4("Graph :)))"),
+                           plotOutput("pop_growth")
                        )
                 )
                 
@@ -58,20 +63,20 @@ dashboardPage(
       tabItem(tabName = "gdp",
               fluidRow(
                 column(width=8,
-                       box(width=12, style="height: 90vh;",
-                           leafletOutput("gdp_map", height = "100%", width = "100%")
+                       box(width=12, style="height: 92vh;",
+                           leafletOutput("gdp_map", height = "90vh")
                        )
                 ),
                 column(width=4,
-                       box(width=12, style="height: 17vh;", 
-                           valueBoxOutput("gdp_value", height = "100%", width = "100%")
+                       box(width=12, 
+                           valueBoxOutput("gdp_value")
                        ),
-                       box(width=12, style="height: 28.5vh;",
+                       box(width=12,
                            h4("GDP per Capita"),
                            gaugeOutput("gdp_capita_gauge")
                        ),
-                       box(width=12, style="height: 40vh;",
-                           plotOutput("gdp_growth", height = "100%", width = "100%")
+                       box(width=12,
+                           plotOutput("gdp_growth")
                        )
                 )
               )
@@ -80,20 +85,21 @@ dashboardPage(
       tabItem(tabName = "qol",
               fluidRow(
                 column(width=8,
-                       box(width=12, style="height: 90vh;",
+                       box(width=12, style="height: 92vh;",
                            leafletOutput("qol_map", height = "90vh")
                        )
                 ),
                 column(width=4,
-                       box(width=12, style="height: 17vh;", 
-                           valueBoxOutput("hdi_value", height = "90%", width = "110%")
+                       box(width=12,
+                           valueBoxOutput("hdi_value")
                        ),
-                       box(width=12, style="height: 25vh;",
+                       box(width=12,
                            h4("Happiness Score"),
                            gaugeOutput("happy_score")
                        ),
-                       box(width=12, style="height: 45vh;",
-                           plotOutput("hdi_growth", height = "100%", width = "100%")
+                       box(width=12,
+                           h4("HDI Over Time"),
+                           plotOutput("hdi_growth")
                        )
                 )
               )
