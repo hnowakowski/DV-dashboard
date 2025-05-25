@@ -16,6 +16,7 @@ dashboardPage(skin = "black",
   dashboardHeader(title="People Inspector"),
   dashboardSidebar(
     sidebarMenu(
+      menuItem("Introduction", tabName = "introduction"),
       menuItem("Population", tabName = "population"),
       menuItem("GDP", tabName = "gdp"),
       menuItem("Quality of Life", tabName = "qol")
@@ -26,6 +27,12 @@ dashboardPage(skin = "black",
       includeCSS("www/style.css")
     ),
     tabItems(
+      tabItem(tabName = "introduction",
+              h2("Welcome to the People Inspector Dashboard"),
+              p("This dashboard provides insights into population, GDP, and quality of life across countries."),
+              p("Use the sidebar to navigate between different sections.")
+      )
+      ,
       tabItem(tabName = "population",
               fluidRow(
                 column(width=8,
