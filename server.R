@@ -322,20 +322,19 @@ shinyServer(function(input, output, session) {
 
   })
   
-  output$hdi_growth <- renderPlot({
+  library(plotly)
+  
+  output$hdi_growth <- renderPlotly({
     req(selected_country())
-
-    
     
     target_index <- which(hap_data$flagCode == selected_country())
     if (length(target_index) != 0) {
       target_pos <- hap_data[target_index, "HappiestCountriesWorldHappinessReportRankings2024"]
       print(paste("Target index:", target_index))
-  
+      
       window <- 2
       neighbors <- hap_data[max(1, target_index - window) : min(target_index + window, nrow(hap_data)), ]
-  
-      target_index <- which(neighbors$flagCode == selected_country())
+      
       neighbors$color_group <- ifelse(neighbors$HappiestCountriesWorldHappinessReportRankings2024 == target_pos, "red", "#1f77b4")
       
       lowest <- min(neighbors$HappiestCountriesWorldHappinessReportScore2024, na.rm = TRUE)
@@ -343,24 +342,34 @@ shinyServer(function(input, output, session) {
       print(paste("Lowest score:", lowest))
       print(paste("Highest score:", highest))
       
-        ggplot(neighbors, aes(x = reorder(country, HappiestCountriesWorldHappinessReportScore2024), y = HappiestCountriesWorldHappinessReportScore2024, fill = color_group)) +
+      p <- ggplot(neighbors, aes(x = reorder(country, HappiestCountriesWorldHappinessReportScore2024), 
+                                 y = HappiestCountriesWorldHappinessReportScore2024, 
+                                 fill = color_group,
+                                 text = paste0(country, "<br>Score: ", HappiestCountriesWorldHappinessReportScore2024, "<br>Rank: ", HappiestCountriesWorldHappinessReportRankings2024))) +
         geom_col() +
         scale_fill_identity() +
         coord_flip(ylim = c(lowest-0.02, highest+0.02)) +
         labs(title = "Happiness Score by Country",
              x = "Country",
              y = "Happiness Score") +
-        theme_minimal()
-        
+        theme_minimal() + theme(
+          legend.position = "none",      
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank(), 
+          axis.text.y = element_text(size = 8, margin = margin(r = 200)) 
+        )
+      rank <- as.character(target_pos)
+      ggplotly(p, tooltip = "text")
+      
     } else {
       error_message <- "No Info!"
       
-      ggplot() + 
+      p <- ggplot() + 
         annotate("text", x = 0.5, y = 0.5, label = error_message, size = 12, color = "black", hjust = 0.5, vjust = 0.5) +
         theme_void()
+      
+      ggplotly(p)
     }
-    
-    
-    
   })
+  
 })

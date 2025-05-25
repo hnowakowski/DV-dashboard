@@ -10,6 +10,7 @@ library(dplyr)
 library(countrycode)
 library(sf)
 library(shinythemes)
+library(plotly)
 
 
 dashboardPage(skin = "black",
@@ -99,7 +100,7 @@ dashboardPage(skin = "black",
                        ),
                        box(width=12,
                            h4("HDI Ranking"),
-                           plotOutput("hdi_growth")
+                           plotlyOutput("hdi_growth")
                        )
                 )
               )
