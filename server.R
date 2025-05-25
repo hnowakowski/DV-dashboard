@@ -323,13 +323,29 @@ shinyServer(function(input, output, session) {
   
   output$hdi_growth <- renderPlot({
     req(selected_country())
+
     
-    country_name <- hdi_data %>%
-      filter(flagCode == selected_country()) %>%
-      pull(country)
+    # Find the row index of the selected country
+    target_index <- which(hap_data$flagCode == selected_country())
+    print(paste("Target index:", target_index))
+
+    window <- 2
+    neighbors <- hap_data[max(1, target_index - window) : min(target_index + window, nrow(hap_data)), ]
+
+
+    lowest <- min(neighbors$HappiestCountriesWorldHappinessReportScore2024, na.rm = TRUE)
+    highest <- max(neighbors$HappiestCountriesWorldHappinessReportScore2024, na.rm = TRUE)
+    print(paste("Lowest score:", lowest))
+    print(paste("Highest score:", highest))
     
-    # idk what here
-    
+    ggplot(neighbors, aes(x = reorder(country, HappiestCountriesWorldHappinessReportScore2024), y = HappiestCountriesWorldHappinessReportScore2024)) +
+      geom_col(fill = "#1f77b4") +
+      
+      coord_flip(ylim = c(lowest-0.02, highest+0.02)) +
+      labs(title = "Happiness Score by Country",
+           x = "Country",
+           y = "Happiness Score") +
+      theme_minimal()
     
   })
 })
