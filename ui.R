@@ -29,23 +29,23 @@ dashboardPage(skin = "black",
       tabItem(tabName = "population",
               fluidRow(
                 column(width=8,
-                       box(width=12, style="height: 90vh;",
+                       box(width=12, style="height: 92vh;",
                            leafletOutput("pop_map", height = "90vh")
                        )
                 ),
                 column(width=4,
                        
                        box(
-                         width = 12, style="height: 17vh;", 
+                         width = 12, 
                           valueBoxOutput("pop_count", width = 16)
                        )
                        ,
-                       box(width=12, style="height: 28.5vh;",
+                       box(width=12,
                            h4("Fertility Rate"),
                            gaugeOutput("fertility_gauge")
                        ),
-                       box(width=12, style="height: 40vh;",
-                           h4("booper"),
+                       box(width=12,
+                           h4("Graph :)))"),
                            plotOutput("pop_growth")
                        )
                 )
@@ -56,19 +56,19 @@ dashboardPage(skin = "black",
       tabItem(tabName = "gdp",
               fluidRow(
                 column(width=8,
-                       box(width=12, style="height: 90vh;",
+                       box(width=12, style="height: 92vh;",
                            leafletOutput("gdp_map", height = "90vh")
                        )
                 ),
                 column(width=4,
-                       box(width=12, style="height: 17vh;", 
+                       box(width=12, 
                            valueBoxOutput("gdp_value")
                        ),
-                       box(width=12, style="height: 28.5vh;",
+                       box(width=12,
                            h4("GDP per Capita"),
                            gaugeOutput("gdp_capita_gauge")
                        ),
-                       box(width=12, style="height: 40vh;",
+                       box(width=12,
                            plotOutput("gdp_growth")
                        )
                 )
@@ -78,19 +78,19 @@ dashboardPage(skin = "black",
       tabItem(tabName = "qol",
               fluidRow(
                 column(width=8,
-                       box(width=12, style="height: 90vh;",
+                       box(width=12, style="height: 92vh;",
                            leafletOutput("qol_map", height = "90vh")
                        )
                 ),
                 column(width=4,
-                       box(width=12, style="height: 17vh;", 
+                       box(width=12,
                            valueBoxOutput("hdi_value")
                        ),
-                       box(width=12, style="height: 28.5vh;",
+                       box(width=12,
                            h4("Happiness Score"),
                            gaugeOutput("happy_score")
                        ),
-                       box(width=12, style="height: 28.5vh;",
+                       box(width=12,
                            h4("HDI Over Time"),
                            plotOutput("hdi_growth")
                        )
