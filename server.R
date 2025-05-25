@@ -94,7 +94,7 @@ shinyServer(function(input, output, session) {
     # 2.1 is the replacement rate hence it's marked in green
     # basically the entire developed world is below that so the red threshold is 1.5 tho
     # so that not all western countries are marked in the red and there's moreso a distinction between whose situation is bad and whose is terrible
-    gauge(f, min=0, max = max_fertility, symbol = '', gaugeSectors(
+    gauge(f, min=0, max = max_fertility, label = 'Births per woman', gaugeSectors(
       success = c(2.1, max_fertility),
       warning = c(1.5, 2.1),
       danger = c(0, 1.5)
@@ -196,7 +196,7 @@ shinyServer(function(input, output, session) {
     # print(max_gdp_capita)
     
     # max gauge value set a lil above usa's gdp per capita so that the bar does not look comically small for most countries
-    gauge(g, min=0, max = 90000, symbol = '', gaugeSectors(
+    gauge(g, min=0, max = 90000, symbol = '$', gaugeSectors(
       success = c(30000, 90000),
       warning = c(10000, 30000),
       danger = c(0, 10000)
@@ -313,7 +313,7 @@ shinyServer(function(input, output, session) {
       pull(HappiestCountriesWorldHappinessReportScore2024)
     
     
-    gauge(h, min=0, max = max_hap, symbol = '', gaugeSectors(
+    gauge(h, min=0, max = max_hap, gaugeSectors(
       success = c(max_hap*0.7, max_hap),
       warning = c(max_hap*0.5, max_hap*0.7),
       danger = c(0, max_hap*0.5)

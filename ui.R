@@ -9,9 +9,10 @@ library(ggplot2)
 library(dplyr)
 library(countrycode)
 library(sf)
+library(shinythemes)
 
 
-dashboardPage(
+dashboardPage(skin = "black",
   dashboardHeader(title="People Inspector"),
   dashboardSidebar(
     sidebarMenu(
@@ -21,6 +22,9 @@ dashboardPage(
     )
   ),
   dashboardBody(
+    tags$head(
+      includeCSS("www/style.css")
+    ),
     tabItems(
       tabItem(tabName = "population",
               fluidRow(
