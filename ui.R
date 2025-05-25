@@ -98,7 +98,7 @@ dashboardPage(skin = "black",
                            gaugeOutput("happy_score")
                        ),
                        box(width=12,
-                           h4("HDI Over Time"),
+                           h4("HDI Ranking"),
                            plotOutput("hdi_growth")
                        )
                 )

@@ -9,6 +9,7 @@ library(ggplot2)
 library(dplyr)
 library(countrycode)
 library(sf)
+library(plotly)
 #library(rsconnect)
 
 pop_data <- read.csv("datasets/population.csv", sep = ",")
@@ -325,27 +326,41 @@ shinyServer(function(input, output, session) {
     req(selected_country())
 
     
-    # Find the row index of the selected country
-    target_index <- which(hap_data$flagCode == selected_country())
-    print(paste("Target index:", target_index))
-
-    window <- 2
-    neighbors <- hap_data[max(1, target_index - window) : min(target_index + window, nrow(hap_data)), ]
-
-
-    lowest <- min(neighbors$HappiestCountriesWorldHappinessReportScore2024, na.rm = TRUE)
-    highest <- max(neighbors$HappiestCountriesWorldHappinessReportScore2024, na.rm = TRUE)
-    print(paste("Lowest score:", lowest))
-    print(paste("Highest score:", highest))
     
-    ggplot(neighbors, aes(x = reorder(country, HappiestCountriesWorldHappinessReportScore2024), y = HappiestCountriesWorldHappinessReportScore2024)) +
-      geom_col(fill = "#1f77b4") +
+    target_index <- which(hap_data$flagCode == selected_country())
+    if (length(target_index) != 0) {
+      target_pos <- hap_data[target_index, "HappiestCountriesWorldHappinessReportRankings2024"]
+      print(paste("Target index:", target_index))
+  
+      window <- 2
+      neighbors <- hap_data[max(1, target_index - window) : min(target_index + window, nrow(hap_data)), ]
+  
+      target_index <- which(neighbors$flagCode == selected_country())
+      neighbors$color_group <- ifelse(neighbors$HappiestCountriesWorldHappinessReportRankings2024 == target_pos, "red", "#1f77b4")
       
-      coord_flip(ylim = c(lowest-0.02, highest+0.02)) +
-      labs(title = "Happiness Score by Country",
-           x = "Country",
-           y = "Happiness Score") +
-      theme_minimal()
+      lowest <- min(neighbors$HappiestCountriesWorldHappinessReportScore2024, na.rm = TRUE)
+      highest <- max(neighbors$HappiestCountriesWorldHappinessReportScore2024, na.rm = TRUE)
+      print(paste("Lowest score:", lowest))
+      print(paste("Highest score:", highest))
+      
+        ggplot(neighbors, aes(x = reorder(country, HappiestCountriesWorldHappinessReportScore2024), y = HappiestCountriesWorldHappinessReportScore2024, fill = color_group)) +
+        geom_col() +
+        scale_fill_identity() +
+        coord_flip(ylim = c(lowest-0.02, highest+0.02)) +
+        labs(title = "Happiness Score by Country",
+             x = "Country",
+             y = "Happiness Score") +
+        theme_minimal()
+        
+    } else {
+      error_message <- "No Info!"
+      
+      ggplot() + 
+        annotate("text", x = 0.5, y = 0.5, label = error_message, size = 12, color = "black", hjust = 0.5, vjust = 0.5) +
+        theme_void()
+    }
+    
+    
     
   })
 })
