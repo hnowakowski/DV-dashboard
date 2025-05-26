@@ -54,7 +54,6 @@ error_gauge <- function() {
 shinyServer(function(input, output, session) {
   print("running")
   #rsconnect::writeManifest()
-  
 
   selected_country <- reactiveVal(NULL)
   
@@ -155,11 +154,11 @@ shinyServer(function(input, output, session) {
         ) %>%
         mutate(Year = as.integer(sub("X", "", Year)))
       
-      ggplot(pop_hist, aes(x = Year, y = Population)) +
+      ggplot(pop_hist, aes(x = Year, y = Population/1000000)) +
         geom_line(color = "blue") +
         geom_point() +
         labs(title = paste("Population Growth for", selected_country()),
-             x = "Year", y = "Population") +
+             x = "Year", y = "Population (millions)") +
         theme_minimal()
     }
   })
@@ -263,7 +262,7 @@ shinyServer(function(input, output, session) {
           ) %>%
           mutate(
             Year = as.integer(sub("X", "", Year)),
-            GDP = as.numeric(GDP) / 1e6
+            GDP = as.numeric(GDP) / 1e9
             
           )
       
@@ -271,7 +270,7 @@ shinyServer(function(input, output, session) {
           geom_line(color = "green") +
           geom_point() +
           labs(title = paste("GDP Growth for", country_name),
-               x = "Year", y = "GDP") +
+               x = "Year", y = "GDP (Billions)") +
           theme_minimal()
     
       } else {
@@ -428,12 +427,17 @@ shinyServer(function(input, output, session) {
   
   
   
+  n_pop_data <- pop_data %>% select(-c(Country.Code, Indicator.Name, Indicator.Code))
+  n_fer_data <- fer_data %>% select(-c(Country.Code, Indicator.Name, Indicator.Code))
+  
+  
+  
   
   output$pop_table <- renderDT({
     req(input$pop_choice)
     switch(input$pop_choice,
              "pop" = datatable(
-               pop_data,
+               n_pop_data,
                options = list(
                  scrollX = TRUE,
                  scrollY = "400px",
@@ -444,7 +448,7 @@ shinyServer(function(input, output, session) {
              ),
              
              "fer" =  datatable(
-               fer_data,
+               n_fer_data,
                options = list(
                  scrollX = TRUE,
                  scrollY = "400px",
