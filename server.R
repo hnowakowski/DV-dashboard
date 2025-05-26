@@ -430,38 +430,84 @@ shinyServer(function(input, output, session) {
   
   
   output$pop_table <- renderDT({
-    switch(input$table_choice,
-           "pop" = datatable(pop_data),
-           "fer" = datatable(fer_data)
-    )
+    req(input$pop_choice)
+    switch(input$pop_choice,
+             "pop" = datatable(
+               pop_data,
+               options = list(
+                 scrollX = TRUE,
+                 scrollY = "400px",
+                 pageLength = 10,
+                 autoWidth = TRUE
+               ),
+               rownames = FALSE
+             ),
+             
+             "fer" =  datatable(
+               fer_data,
+               options = list(
+                 scrollX = TRUE,
+                 scrollY = "400px",
+                 pageLength = 10,
+                 autoWidth = TRUE
+               ),
+               rownames = FALSE
+             )
+        )
   })
   
   output$gdp_table <- renderDT({ 
-    datatable(
-      gdp_data,
-      options = list(
-        pageLength = 10,
-        autoWidth = TRUE
-      ),
-      rownames = FALSE
+    req(input$gdp_choice)
+    switch(input$gdp_choice,
+           "gdp" = datatable(
+             gdp_data,
+             options = list(
+               scrollX = TRUE,
+               scrollY = "400px",
+               pageLength = 10,
+               autoWidth = TRUE
+             ),
+             rownames = FALSE
+           ),
+           
+           "gdpc" =  datatable(
+             gdp_capita_data,
+             options = list(
+               scrollX = TRUE,
+               scrollY = "400px",
+               pageLength = 10,
+               autoWidth = TRUE
+             ),
+             rownames = FALSE
+           )
     )
-    
-    
-    
   })
   
   output$qol_table <- renderDT({ 
-    datatable(
-      hap_data,
-      options = list(
-        pageLength = 10,
-        autoWidth = TRUE
-      ),
-      rownames = FALSE
+    req(input$qol_choice)
+    switch(input$qol_choice,
+           "hap" = datatable(
+             hap_data,
+             options = list(
+               scrollX = TRUE,
+               scrollY = "400px",
+               pageLength = 10,
+               autoWidth = TRUE
+             ),
+             rownames = FALSE
+           ),
+           
+           "hdi" =  datatable(
+             hdi_data,
+             options = list(
+               scrollX = TRUE,
+               scrollY = "400px",
+               pageLength = 10,
+               autoWidth = TRUE
+             ),
+             rownames = FALSE
+           )
     )
-    
-    
-    
   })
   
   

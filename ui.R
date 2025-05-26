@@ -24,8 +24,8 @@ dashboardPage(skin = "black",
       menuItem("Quality of Life", tabName = "qol", icon = icon("smile")),
       
       menuItem("Tables", icon = icon("table"),
-               menuSubItem("Population Table", tabName = "Population_table"),
-               menuSubItem("GDP Table", tabName = "GDP_table"),
+               menuSubItem("Population Table", tabName = "population_table"),
+               menuSubItem("GDP Table", tabName = "gdp_table"),
                menuSubItem("Quality of Life Table", tabName = "qol_table")
       )
     )
@@ -136,18 +136,20 @@ dashboardPage(skin = "black",
       ),
       
       tabItem(tabName = "Population_table", fluidRow(
-        column(4,
-               selectInput("Pop choice", "Choose table:",
-                           choices = c("Population" = "pop", "Fertility" = "fer"))
-        ),
-        column(12,
-               DTOutput("pop_table")
-        )
-      )),   
+        column(4, selectInput("pop_choice", "Choose table:",
+                           choices = c("Population" = "pop", "Fertility" = "fer"))),
+        column(12, DTOutput("pop_table")))),   
       
-      tabItem(tabName = "GDP_table", h2("GDP Panel"), DTOutput("gdp_table")),
-      tabItem(tabName = "qol_table", h2("Quality of Life Panel"), DTOutput("qol_table"))
       
+      tabItem(tabName = "gdp_table", fluidRow(
+        column(4, selectInput("gdp_choice", "Choose table:",
+                              choices = c("GDP" = "gdp", "GDP per capita" = "gdpc"))),
+        column(12, DTOutput("gdp_table")))),
+      
+      tabItem(tabName = "qol_table", fluidRow(
+        column(4, selectInput("qol_choice", "Choose table:",
+                              choices = c("Happiness Index" = "hap", "HDI" = "hdi"))),
+        column(12, DTOutput("qol_table"))))
       
     )
   )
