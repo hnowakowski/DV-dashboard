@@ -41,21 +41,30 @@ dashboardPage(skin = "black",
           table.dataTable {
             background-color: #1e1e1e !important;  
             color: white !important;               
-          }
+        }
         
-          table.dataTable thead {
+        table.dataTable thead {
             background-color: #333333 !important;  
             color: white !important;
-          }
+        }
         
-          table.dataTable tbody tr {
+        table.dataTable thead th {
+            text-align: center !important;
+        }
+        
+        table.dataTable tbody tr {
             background-color: #2a2a2a !important;
-          }
+        }
         
-          .dataTables_wrapper {
+        table.dataTable tbody td {
+            text-align: center !important;
+        }
+        
+        .dataTables_wrapper {
             background-color: #1e1e1e !important;
             color: white !important;
-          }
+        }
+
       ")),
     
     tabItems(
@@ -72,7 +81,7 @@ dashboardPage(skin = "black",
                 column(width = 5,offset = 1, style = "text-align: right;", img(src = "hubert.jpg", height = "200px", width = "50%")),
                 column(width = 5, style = "text-align: left;", img(src = "mukha.jpg", height = "200px", width = "50%"))
               ),
-              p(br(),"Hubert Nowakowski (left"),
+              p(br(),"Hubert Nowakowski (left)"),
               p("Mukhammad Sattorov (right)")
               
               

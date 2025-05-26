@@ -430,7 +430,16 @@ shinyServer(function(input, output, session) {
   n_pop_data <- pop_data %>% select(-c(Country.Code, Indicator.Name, Indicator.Code))
   n_fer_data <- fer_data %>% select(-c(Country.Code, Indicator.Name, Indicator.Code))
   
+  n_gdp_data <- gdp_data %>% select(-c(Country.Code, Indicator.Name, Indicator.Code))
+  n_gdp_capita_data <- gdp_capita_data %>% select(-c(Country.Code, Indicator.Name, Indicator.Code))
   
+  
+  n_hdi_data <- hdi_data
+  n_hap_data <- hap_data
+  
+  
+  colnames(n_hap_data) <- c("Country Code", "Country Name", "Global Ranking in 2024", "Global Score in 2024", "Latest Score Change", "Global Ranking in 2023", "Global Score in 2023")
+  colnames(n_hdi_data) <- c("Country Code", "Country Name", "Tier", "Score")
   
   
   output$pop_table <- renderDT({
@@ -464,7 +473,7 @@ shinyServer(function(input, output, session) {
     req(input$gdp_choice)
     switch(input$gdp_choice,
            "gdp" = datatable(
-             gdp_data,
+             n_gdp_data,
              options = list(
                scrollX = TRUE,
                scrollY = "400px",
@@ -475,7 +484,7 @@ shinyServer(function(input, output, session) {
            ),
            
            "gdpc" =  datatable(
-             gdp_capita_data,
+             n_gdp_capita_data,
              options = list(
                scrollX = TRUE,
                scrollY = "400px",
