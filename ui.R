@@ -70,7 +70,7 @@ dashboardPage(skin = "black",
     tabItems(
       #------------------------ intro stuff -------------------
       tabItem(tabName = "introduction",
-              img(src = "pplogo.png", height = "160px", width = "80%"),
+              img(src = "pplogo.png", height = "160px"),
               div(style = "text-align: center;",
               h2("Welcome to the People Inspector Dashboard"),
               h3("What is the People Inspector Dashboard?"),
@@ -78,8 +78,8 @@ dashboardPage(skin = "black",
               h4(br(), br(), "Authors:"),
               
               fluidRow(
-                column(width = 5,offset = 1, style = "text-align: right;", img(src = "hubert.jpg", height = "200px", width = "50%")),
-                column(width = 5, style = "text-align: left;", img(src = "mukha.jpg", height = "200px", width = "50%"))
+                column(width = 5,offset = 1, style = "text-align: right;", img(src = "hubert.jpg", width = "50%")),
+                column(width = 5, style = "text-align: left;", img(src = "mukha.jpg", width = "50%"))
               ),
               p(br(),"Hubert Nowakowski (left)"),
               p("Mukhammad Sattorov (right)")
@@ -95,31 +95,31 @@ dashboardPage(skin = "black",
       #------------------------ how to stuff -----------------
       
       
-      tabItem(tabName = "how",
+  tabItem(tabName = "how",
               
               h3("What kindof data can I see?"),
               h4("Population:"),
               p("Have you ever wondered what the current population of Afghanistan is, what kind of growth China has experienced in the past 10 years, or simply what the fertility rate of Papua New Guinea is?"),
               p("All you have to do is drag you mouse around the map and click on a country"),
-              img(src = "popmap.png", height = "500px", width = "70%"),
+              img(src = "popmap.png", height = "600px"),
               p(br()),
               fluidRow(
-                column(width = 5,offset = 1, style = "text-align: left;", p("First thing is the value box, which can be of 3 different colors", br(), "Its purpose is to visualize effectively the meaning of that value (wether it is high or too low)", br(), "Next up is the fertility gauge that shows the amount of births per woman of that country. Again, it visualizes if the number is dangerously low.")),
-                column(width = 5, style = "text-align: left;", img(src = "popp1.png", height = "250px", width = "50%"))
+                column(width = 5,offset = 1, style = "text-align: left;", p("First thing is the value box, which can be of 3 different colors", br(), "Its purpose is to visualize effectively the meaning of that value (whether it is high or too low)", br(), "Next up is the fertility gauge that shows the amount of births per woman of that country. Again, it visualizes if the number is dangerously low.")),
+                column(width = 5, style = "text-align: left;", img(src = "popp1.png", height = "250px"))
               ),
               p(br()),
               fluidRow(
                 column(width = 5,offset = 1, style = "text-align: left;", p("And lastly is the population growth of that country.", br(), "It helps to educate one on the previous behaviour of the population growth and provide information in predicting further change.")),
-                column(width = 5, style = "text-align: left;", img(src = "popp2.png", height = "250px", width = "50%"))
+                column(width = 5, style = "text-align: left;", img(src = "popp2.png", height = "250px"))
               ),
               
               p(br()),
-              h4("GPD:"),
-              p("The GPD related page is similar to the population page."),
+              h4("GDP:"),
+              p("The GDP related page is similar to the population page."),
               p(br()),
               fluidRow(
                 column(width = 5,offset = 1, style = "text-align: left;", p("As you can see, it is very similar and is used for more or less the same purpose.", br(), "Total GPD of the current year is found first , followed by the per Capita with colors", br(), "and visualization to distinguish between different levels. And lastly, GPD growth history helps to understand how a specifc country's economy goes about. ")),
-                column(width = 5, style = "text-align: left;", img(src = "GPD .png", height = "400px", width = "50%"))
+                column(width = 5, style = "text-align: left;", img(src = "GPD .png", height = "500px"))
               ),
               
               p(br()),
@@ -129,13 +129,13 @@ dashboardPage(skin = "black",
               p(br()),
               fluidRow(
                 column(width = 5,offset = 1, style = "text-align: left;", p("First, a value box with the country's Human Development Index (with colors to distinguish)", br(), "Followed by the Happiness score of that country.", br(), "And then there is an interactive bar chart")),
-                column(width = 5, style = "text-align: left;", img(src = "qol1.png", height = "300px", width = "45%"))
+                column(width = 5, style = "text-align: left;", img(src = "qol1.png", height = "300px"))
               ),
               
               p(br()),
               fluidRow(
                 column(width = 5,offset = 1, style = "text-align: left;", p("This bar chart visualizes the ranking of the country based on it's happiness score. Hovering your cursor will reveal the rank of the country, furthermore, there are 4 more countries present.", br(), "These countries are 2 direct superiors and 2 direct inferiors (though when the happiness scores are equal, they are treated as interchangable", br(), "Your chosen country is highlighted in red")),
-                column(width = 5, style = "text-align: left;", img(src = "qol2.png", height = "400px", width = "60%"))
+                column(width = 5, style = "text-align: left;", img(src = "qol2.png", height = "400px"))
               )
               
       ),        
